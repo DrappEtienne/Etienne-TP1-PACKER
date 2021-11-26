@@ -1,0 +1,24 @@
+[Unit]
+Description=Go lang service
+ConditionPathExists=/root/golangapp/golang-myip/
+After=network.target
+
+[Service]
+Type=simple
+User=root
+Group=root
+
+WorkingDirectory=/root/golangapp/golang-myip/
+ExecStart=/root/golangapp/golang-myip/build/server.x86_64
+
+Restart=on-failure
+RestartSec=10
+
+StandardOutput=syslog
+StandardError=syslog
+SyslogIdentifier=appgoservice
+
+[Install]
+WantedBy=multi-user.target
+~
+

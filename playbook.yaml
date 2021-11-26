@@ -5,4 +5,43 @@
     - name: Install package GIT
       package:
         name: git
-        state: latest 
+        state: latest
+     
+    - name : Create file in systemd
+      ansible.builtin.template :
+        src : ~/Etienne-TP1-PACKER/template/golang.service
+	dest : /etc/systemd/system/golang.service
+        
+    - name : Create go directory
+      ansible.builtin.file:
+        path : ~/golangapp
+        state : directory
+        mode : '0755'
+
+    - name : 
+      ansible.builtin.git :
+        repo : 'https://github.com/BastienBalaud/golang-myip.git'
+        dest : ~/golangapp/
+        
+    - name : Set SELINUX PERMISSIVE mode
+      ansible.posix.selinux :
+	policy : targeted
+        state : permissiove
+
+    - name: Build 'all' target with custom Makefile
+      community.general.make:
+        chdir: /root/golangapp/golang-myip
+        target: all
+        file: /root/golangapp/golang-myip/Makefile 
+
+    - name : Start service golang
+      ansible.builtin.service :
+        name : golang.service
+        state : started
+
+    - name : Enable service golang
+      ansible.builtin.service :
+        name : golang.service
+        enabled : yes
+
+       
