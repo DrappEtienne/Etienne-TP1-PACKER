@@ -9,8 +9,8 @@
      
     - name : Create file in systemd
       ansible.builtin.template :
-        src : ~/Etienne-TP1-PACKER/template/golang.service
-	dest : /etc/systemd/system/golang.service
+        src : /root/Etienne-TP1-PACKER/template/golang.service
+        dest : /etc/systemd/system/golang.service
         
     - name : Create go directory
       ansible.builtin.file:
@@ -25,7 +25,7 @@
         
     - name : Set SELINUX PERMISSIVE mode
       ansible.posix.selinux :
-	policy : targeted
+        policy : targeted
         state : permissiove
 
     - name: Build 'all' target with custom Makefile
