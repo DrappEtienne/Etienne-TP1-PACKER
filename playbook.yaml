@@ -7,11 +7,6 @@
         name: git
         state: latest
 
-    - name: Enable service ssh
-      ansible.builtin.service:
-        name: ssh.service
-        enabled: yes
-
     - name: Enable service sshd
       ansible.builtin.service:
         name: sshd.service
@@ -36,8 +31,8 @@
 
     - name: Get goland myip from distant git
       ansible.builtin.git:
-        repo: 'https://github.com/BastienBalaud/golang-myip.git'
-        dest: /root/golangapp
+        repo: https://github.com/BastienBalaud/golang-myip.git
+        dest: /root/golangapp/
         clone: yes
         update: yes
 
@@ -53,12 +48,18 @@
       reboot:
         reboot_timeout: 600
 
-    - name: Build 'all' target with custom Makefile
-      community.general.make:
-        chdir: /root/golangapp/golang-myip
-        target: all
-        file: /root/golangapp/golang-myip/Makefile
-      become: yes 
+#    - name: Build 'all' target with custom Makefile
+#      community.general.make:
+#        chdir: /root/golangapp/golang-myip
+#        target: all
+#        file: /root/golangapp/golang-myip/Makefile
+#      become: yes
+
+    - name: Makefile with shell
+      shell: 'make -C /root/golangapp/golang-myip -f /root/golangapp/golang-myip/Makefile'
+      args:
+        executable: /bin/bash
+      become: True
 
     - name: Start service golang
       ansible.builtin.service:
