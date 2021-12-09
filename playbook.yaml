@@ -6,42 +6,68 @@
       package:
         name: git
         state: latest
-     
-    - name : Create file in systemd
-      ansible.builtin.template :
-        src : /root/Etienne-TP1-PACKER/template/golang.service
-        dest : /etc/systemd/system/golang.service
-        
-    - name : Create go directory
-      ansible.builtin.file:
-        path : ~/golangapp
-        state : directory
-        mode : '0755'
 
-    - name : 
-      ansible.builtin.git :
-        repo : 'https://github.com/BastienBalaud/golang-myip.git'
-        dest : ~/golangapp/
+    - name: Enable service ssh
+      ansible.builtin.service:
+        name: ssh.service
+        enabled: yes
+
+    - name: Enable service sshd
+      ansible.builtin.service:
+        name: sshd.service
+        enabled: yes
+
+
+    - name : Install Make package
+      package:
+        name: make 
+        state: latest
+     
+    - name: Create file in systemd
+      ansible.builtin.template:
+        src: /root/Etienne-TP1-PACKER/template/golang.service
+        dest: /etc/systemd/system/golang.service
         
-    - name : Set SELINUX PERMISSIVE mode
-      ansible.posix.selinux :
-        policy : targeted
-        state : permissiove
+    - name: Create go directory
+      ansible.builtin.file:
+        path: /root/golangapp
+        state: directory
+        mode: '0755'
+
+    - name: Get goland myip from distant git
+      ansible.builtin.git:
+        repo: 'https://github.com/BastienBalaud/golang-myip.git'
+        dest: /root/golangapp
+        clone: yes
+        update: yes
+
+    - name: Restart systemd daemon to read new service
+      ansible.builtin.systemd:
+        daemon_reload: yes
+
+    - name: Set selinux in disabled mode
+      ansible.posix.selinux:
+        state: disabled
+
+    - name: Reboot machine for selinux modifications
+      reboot:
+        reboot_timeout: 600
 
     - name: Build 'all' target with custom Makefile
       community.general.make:
         chdir: /root/golangapp/golang-myip
         target: all
-        file: /root/golangapp/golang-myip/Makefile 
+        file: /root/golangapp/golang-myip/Makefile
+      become: yes 
 
-    - name : Start service golang
-      ansible.builtin.service :
-        name : golang.service
-        state : started
+    - name: Start service golang
+      ansible.builtin.service:
+        name: golang.service
+        state: started
 
-    - name : Enable service golang
-      ansible.builtin.service :
-        name : golang.service
-        enabled : yes
+    - name: Enable service golang
+      ansible.builtin.service:
+        name: golang.service
+        enabled: yes
 
        

@@ -9,7 +9,7 @@ source "qemu" "example" {
   http_directory    = "./ks"
   ssh_username      = "root"
   ssh_password      = "%Serveur44"
-  ssh_timeout       = "20m"
+  ssh_timeout       = "40m"
   vm_name           = "tp-1"
   memory            = "2048"
   net_device        = "virtio-net"
