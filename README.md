@@ -1,6 +1,6 @@
 # Rendu Packer Etienne DRAPP
 
-Le playbook.yaml a besoin d'aller chercher le template du service le dossier template. Le dossier doit se trouver dans ce chemin (ou alors modifier le chemin dans le playbook) :
+Le playbook.yaml a besoin d'aller chercher le template du service dans le dossier template. Le dossier doit se trouver dans ce chemin (ou alors modifier le chemin dans le playbook) :
 
 ```bash
 /root/Etienne-TP1-PACKER/template/golang.service
