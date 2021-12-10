@@ -1,6 +1,6 @@
 [Unit]
 Description=Go lang service
-ConditionPathExists=/root/golangapp/golang-myip/
+ConditionPathExists=/tmp/golangapp/
 After=network.target
 
 [Service]
@@ -8,8 +8,8 @@ Type=simple
 User=root
 Group=root
 
-WorkingDirectory=/root/golangapp/golang-myip/
-ExecStart=/root/golangapp/golang-myip/build/server.x86_64
+WorkingDirectory=/tmp/golangapp/
+ExecStart=/tmp/golangapp/build/server.x86_64
 
 Restart=on-failure
 RestartSec=10
@@ -20,5 +20,5 @@ SyslogIdentifier=appgoservice
 
 [Install]
 WantedBy=multi-user.target
-~
+
 

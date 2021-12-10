@@ -1,5 +1,5 @@
 ---
-- hosts: all
+- hosts: localhost
   become: yes
   tasks:
     - name: Install package GIT
@@ -12,27 +12,26 @@
         name: sshd.service
         enabled: yes
 
-
     - name : Install Make package
       package:
         name: make 
         state: latest
      
-    - name: Create file in systemd
+    - name: Create new service in systemd
       ansible.builtin.template:
         src: /root/Etienne-TP1-PACKER/template/golang.service
         dest: /etc/systemd/system/golang.service
         
     - name: Create go directory
       ansible.builtin.file:
-        path: /root/golangapp
+        path: /tmp/golangapp
         state: directory
         mode: '0755'
 
     - name: Get goland myip from distant git
       ansible.builtin.git:
         repo: https://github.com/BastienBalaud/golang-myip.git
-        dest: /root/golangapp/
+        dest: /tmp/golangapp/
         clone: yes
         update: yes
 
@@ -40,23 +39,13 @@
       ansible.builtin.systemd:
         daemon_reload: yes
 
-    - name: Set selinux in disabled mode
+    - name: Set selinux in permissive mode
       ansible.posix.selinux:
-        state: disabled
-
-    - name: Reboot machine for selinux modifications
-      reboot:
-        reboot_timeout: 600
-
-#    - name: Build 'all' target with custom Makefile
-#      community.general.make:
-#        chdir: /root/golangapp/golang-myip
-#        target: all
-#        file: /root/golangapp/golang-myip/Makefile
-#      become: yes
+        policy: targeted
+        state: permissive 
 
     - name: Makefile with shell
-      shell: 'make -C /root/golangapp/golang-myip -f /root/golangapp/golang-myip/Makefile'
+      shell: 'make -C /tmp/golangapp -f /tmp/golangapp/Makefile'
       args:
         executable: /bin/bash
       become: True
