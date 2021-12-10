@@ -1,7 +1,12 @@
 ---
-- hosts: localhost
+- hosts: all 
   become: yes
   tasks:
+    - name: Install package GO
+      package:
+        name: go
+        state: latest
+
     - name: Install package GIT
       package:
         name: git
