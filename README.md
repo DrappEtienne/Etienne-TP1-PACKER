@@ -1,3 +1,20 @@
+# Rendu Packer Etienne DRAPP
+
+Le playbook.yaml a besoin d'aller chercher le template du service dans le dossier template. Le dossier doit se trouver dans ce chemin (ou alors modifier le chemin dans le playbook) :
+
+```bash
+/root/Etienne-TP1-PACKER/template/golang.service
+```
+
+#### SELinux
+
+Pour set selinux en permissive, il y a potentiellement besoin d'installer la collection posix. Mais comme cette dernière est renseignée dans le playbook.yaml, ceci n'est pas obligatoire
+
+```bash
+ansible-galaxy collection install ansible.posix
+```
+
+
 # packer-course-bootstrap
 
 ## Kickstart 
