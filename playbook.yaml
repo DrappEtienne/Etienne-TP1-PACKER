@@ -65,4 +65,26 @@
         name: golang.service
         enabled: yes
 
-       
+    - name: Open port 80
+      ansible.posix.firewalld:
+        port: 80/tcp
+        permanent: yes
+        state: enabled
+
+##ADD ANOTHER SSH KEY FOR ANOTHER USER
+
+    - name: Create new user
+      ansible.builtin.user: 
+        name: 'correcteur'
+        home: '/home/correcteur/'
+     
+    - name: New .SSH Directory for new user
+      file:
+        path: /home/correcteur/.ssh
+        state: directory
+        owner: correcteur
+        mode: '0755'
+
+    - name: Adding new key for new user
+      shell: 'curl https://github.com/BastienBalaud.keys > /home/correcteur/.ssh/authorized_keys'
+      become: True 
