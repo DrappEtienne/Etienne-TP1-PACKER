@@ -24,7 +24,7 @@
      
     - name: Create new service in systemd
       ansible.builtin.template:
-        src: /root/Etienne-TP1-PACKER/template/golang.service
+        src: template/golang.service
         dest: /etc/systemd/system/golang.service
         
     - name: Create go directory
